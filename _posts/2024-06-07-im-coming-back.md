@@ -15,14 +15,14 @@ author: VOID*
 
 这是旧站：[VOIDs技术驿站](https://void-star.icu/)。为啥不想用了呢？当年大三的时候，对于技术一腔热血，觉得搭一个自己的网站是超酷的事情。所以我去腾讯云买了服务器，从阿里云买了域名，用宝塔面板和Wordpress开始搞事，搞了一堆工信部备案的手续，挂上了HTTPS，又踩了无数技术上的坑，总算搞起来了。纵然这很有趣，但真做过才会明白其中的代价：
 
-- 服务器和域名都要收钱（虽然一年下来只是几顿饭钱）。
+- 服务器要收钱（虽然一年下来只是几顿饭钱）。
 - 尽管Wordpress可定制性极强，允许自己设计动态的网页交互，但最后发现那并不是我想要的。我只想要一个安静的地方写字，jekyll这种静态编译生成的网页完全符合我的需求。
 - 服务器有公网IP，已经被各种病毒渗透烂了，光是看日志就能看到每天四五万次的login attempt。甚至还收到过勒索威胁邮件。跟黑客斗智斗勇非常有趣，可是我实在没有时间。留着黑客在我机器上肆意妄为是很危险的，虽然我数据不值钱，但要是损毁就糟糕了。不如把安全交给GitHub。
 - 自建网站如果想要在搜索引擎上排名比较好，还得认真搞SEO。
 - HTTPS证书还得定期更新，我总是记不得那些命令。
 - 国内云服务的监管问题，无需多言。
 
-总而言之我对各种节外生枝的事情感到很痛苦，于是决定投奔Github Pages。唯一割舍不下的就是域名void-star.icu，很独特，很好记，很好看，很有意义。不过人在这世上行走总要放弃一些东西的嘛，复杂的事情都很难有全局最优解。
+总而言之我对各种节外生枝的事情感到很痛苦，于是决定投奔Github Pages。
 
 在新站写点什么呢？
 
@@ -56,6 +56,18 @@ exclude:
 
 确保在`.gitignore`中添加`thirdparty`。然后你就可以愉快地安装所有依赖了。
 
+## Bundle安装时遇到ArgumentError报错
+
+![ArgumentError](../assets/img/2024-06-07-im-coming-back/image.png)
+
+我在Ubuntu上编译，这个错误可能是ruby的版本问题导致的，不妨按下面的流程重新安装ruby。
+
+```shell
+wget https://rubygems.org/rubygems/rubygems-3.5.20.tgz
+sudo ruby setup.rb
+sudo gem install jekyll bundler
+```
+
 ## Jekyll服务本地部署
 
 在命令行执行`jekyll serve --incremental --livereload`，然后访问`http://127.0.0.1:4000`，就可以看到你的网站了。`--incremental`参数可以让jekyll只编译修改过的文件，加快编译速度。`--livereload`参数可以让你在修改文件后自动刷新网页。你就可以一屏写markdown，一屏看效果。
@@ -71,7 +83,7 @@ After=network.target
 Type=simple
 User=sht
 WorkingDirectory=/home/sht/Desktop/Project/Bug-001.github.io
-ExecStart=/usr/bin/jekyll serve --incremental --livereload
+ExecStart=/usr/bin/local/bundle exec jekyll serve --incremental --livereload
 Restart=on-failure
 
 [Install]
